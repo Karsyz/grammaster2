@@ -47,7 +47,7 @@ export default function QtyControlAndDisp(props:any) {
           type="number"
           min={0}
           value={storageObject[keyName]}
-          className='bg-blue-200 text-slate-800 font-semibold text-3xl border-none rounded-xl py-4 px-8 w-full text-center drop-shadow-md z-10'
+          className='bg-blue-200 text-slate-800 font-semibold text-3xl border-none focus:ring-0 rounded-xl py-4 px-8 w-full text-center drop-shadow-md z-10'
           onChange={handleQuantity}
           ref={quantityRef}
           onFocus={() => quantityRef.current.select()}

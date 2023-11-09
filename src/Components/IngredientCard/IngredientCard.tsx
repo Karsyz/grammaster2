@@ -147,7 +147,7 @@ export default function IngredientCard(props:any) {
         name='ingredName'
         value={ingred.name}
         // maxLength={15}
-        className='row-start-1 col-start-1 col-span-2 font-bold text-3xl p-0 border-0 rounded-lg bg-transparent focus:transparent z-20 h-[40px] no-scrollbar resize-none height-auto'
+        className='row-start-1 col-start-1 col-span-2 font-bold text-3xl p-0 border-none focus:ring-0 rounded-lg bg-transparent focus:transparent z-20 h-[40px] no-scrollbar resize-none height-auto'
         onChange={(evt) => {
           handleRecipeIngredientName(evt.target.value, index)
         }}
@@ -163,7 +163,7 @@ export default function IngredientCard(props:any) {
             type='number'
             value={ingred.massRecipe}
             min={0}
-            className={`font-semibold text-xl z-30 p-0 border-0 rounded-lg bg-transparent focus:transparent z-30 h-[30px] w-[${ingred.massRecipe.toString().length}ch] cursor-pointer`}
+            className={`font-semibold text-xl z-30 p-0 border-none focus:ring-0 rounded-lg bg-transparent focus:transparent z-30 h-[30px] w-[${ingred.massRecipe.toString().length}ch] cursor-pointer`}
             onChange={(evt) => {
               index !== 0 ?
                 handleRecipeIngredientMassRecipe(evt.target.value, index)
@@ -186,7 +186,7 @@ export default function IngredientCard(props:any) {
           maxLength={3}
           min={0}
           max={100}
-          className='font-semibold text-xl p-0 border-0 rounded-lg bg-transparent focus:transparent z-30 h-[30px] w-[3ch] cursor-pointer'
+          className='font-semibold text-xl p-0 border-none focus:ring-0 rounded-lg bg-transparent focus:transparent z-30 h-[30px] w-[3ch] cursor-pointer'
           onChange={(evt) => {
             handleRecipeIngredientBakersPercentage(evt.target.value, index)
           }}    
@@ -195,7 +195,7 @@ export default function IngredientCard(props:any) {
           style={{width: ingred.bakersPercentage.toString().length + 'ch'}}
         />
         :
-        <span className='font-semibold text-xl p-0 border-0 rounded-lg bg-transparent focus:transparent z-30 h-[30px]'>100</span>
+        <span className='font-semibold text-xl p-0 border-none focus:ring-0 rounded-lg bg-transparent focus:transparent z-30 h-[30px]'>100</span>
         }
         
           <span className='font-semibold text-xl'>%</span>

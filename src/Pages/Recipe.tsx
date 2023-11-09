@@ -1,14 +1,13 @@
 import '../App.css'
 import { useEffect, useState, useRef, MutableRefObject } from 'react'
 import {  useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { RecipeInter, Ingredient, IngredientInter } from './Recipes'
-import { FaArrowLeft, FaTrashAlt, FaPlus, FaCog, FaSave } from 'react-icons/fa';
+import { FaArrowLeft, FaTrashAlt, FaPlus, FaSave } from 'react-icons/fa';
+import axios from 'axios';
 
 import QtyControlAndDisp from '../Components/QtyControlAndDisp/QtyControlAndDisp';
 import RecipeInstructionListItem from '../Components/RecipeInstructionListItem/RecipeInstructionListItem';
 import IngredientCard from '../Components/IngredientCard/IngredientCard';
-
 
 export default function Recipe() {
   const { id } = useParams()
@@ -22,6 +21,7 @@ export default function Recipe() {
       previousVersions: [{}],
       imageUrl: '', 
       imgAlt: '', 
+      cloudinaryId: '',
       ingredients: [], 
       instructions: [],
     })
@@ -30,6 +30,10 @@ export default function Recipe() {
   const [recipeNameTextareaHeight, setRecipeNameTextareaHeight] = useState(0)
   const [ingredientDeleteButtonVisibility, setIngredientDeleteButtonVisibility] = useState(false)
   const [instructionDeleteButtonVisibility, setInstructionDeleteButtonVisibility] = useState(false)
+  const [file, setFile] = useState<File | null>(null);
+  const [opacity, setOpacity] = useState('opacity-0');
+
+  const recipeNameRef = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
   async function getRecipe() {
     try {
@@ -46,27 +50,40 @@ export default function Recipe() {
   }, [])
 
   async function saveRecipeToDb() {
-      try {
-        const params = new URLSearchParams({
-          id: recipe._id, 
-          name: recipe.name, 
-          totalMass: recipe.totalMass.toString(), 
-          totalRecipeMass: recipe.totalRecipeMass.toString(),
-          recipeQuantity: recipe.recipeQuantity.toString(), 
-          totalQuantity: recipe.totalQuantity.toString(), 
-          imageUrl: recipe.imageUrl, 
-          imgAlt: recipe.imgAlt, 
-          ingredients: JSON.stringify(recipe.ingredients), 
-          instructions: JSON.stringify(recipe.instructions),
-        });
+    try {
+        const formData = new FormData();
 
-        await axios.put(`http://localhost:3115/grammaster/recipe/update/${recipe._id}`, params);
+        formData.append("file", file);
+        
+        formData.append("id", recipe._id )
+        formData.append("name", recipe.name )
+        formData.append("totalMass", recipe.totalMass.toString() )
+        formData.append("totalRecipeMass", recipe.totalRecipeMass.toString() )
+        formData.append("recipeQuantity", recipe.recipeQuantity.toString() )
+        formData.append("totalQuantity", recipe.totalQuantity.toString() )
+        formData.append("imageUrl", recipe.imageUrl )
+        formData.append("imgAlt", recipe.imgAlt )
+        formData.append("ingredients", JSON.stringify(recipe.ingredients) )
+        formData.append("instructions", JSON.stringify(recipe.instructions) )
+        formData.append("imageData", file ? 'true' : '' )
+
+        // console.log(formData.entries())
+
+        for (var pair of formData.entries()) {
+          console.log(pair); 
+      }
+
+        await axios.put(`http://localhost:3115/grammaster/recipe/update/${recipe._id}`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data'
+          }
+        })
 
         setSaveIconColor('text-slate-800')
   
-      } catch (error) {
-        console.error(error);
-      }
+    } catch (error) {
+      console.error(error);
+    }
 
   }
 
@@ -132,9 +149,16 @@ export default function Recipe() {
     setSaveIconColor('text-blue-400')
   }, [recipe])
 
-
   const navigate = useNavigate();
-  const recipeNameRef = useRef() as MutableRefObject<HTMLTextAreaElement>;
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.files && setFile(e.target.files[0]);
+  };
+
+  // set opacity 100 onload
+  useEffect(() => {
+    setTimeout(() => setOpacity('opacity-100'), 10)
+  }, [])
 
   return (
     
@@ -147,6 +171,9 @@ export default function Recipe() {
         onClick={() => navigate(-1)}
       />
 
+      <div 
+        className={`transition duration-300 ease-in-out ${opacity}`}
+      >
       <div className='p-2 mt-2 w-full h-full overflow-scroll no-scrollbar max-w-[500px]'>
         <div className='flex flex-col gap-8 w-full bg-zinc-100 border-2 border-slate-300 drop-shadow-lg p-4 rounded-xl'>
           <div>
@@ -154,7 +181,7 @@ export default function Recipe() {
 
               <textarea
                 value={recipe.name || 'stuff here'}
-                className={`font-bold text-4xl text-slate-800 bg-transparent w-[16ch] p-0 border-0 resize-none rounded-xl no-scrollbar overflow-hidden`}
+                className={`font-bold text-4xl text-slate-800 bg-transparent w-[16ch] p-0 resize-none rounded-xl no-scrollbar overflow-hidden border-none focus:ring-0`}
                 style={{height:`${recipeNameTextareaHeight}px`}}
                 onChange={(evt) => handleRecipeName(evt.target.value)}
                 ref={recipeNameRef}
@@ -281,33 +308,35 @@ export default function Recipe() {
               >
                 <FaPlus 
                     className='inline  font-semibold text-2xl'
-                    
                 />
             </div>
 
           </div>
 
           <div>
-            <div className='flex flex-row gap-4 items-center mb-2 text-slate-800 mb-5'>
-              <h3 className='font-bold text-3xl '>Display Image</h3>
-              <FaCog 
-                className='font-semibold text-2xl'
-                onClick={() => navigate(-1)}
-              />
+            <div className='flex flex-col gap-4 items-start mb-2 text-slate-800 mb-5'>
+              <h3 className='block font-bold text-3xl '>Display Image</h3>
+
+              <div>
+              <label htmlFor="file" className="sr-only">
+                Choose a file
+              </label>
+
+              <input id="file" type="file" onChange={handleFileChange} />
+            </div>
+
             </div>
               <img 
-                  src={recipe.imageUrl} 
+                  src={ file ? URL.createObjectURL(file) : recipe.imageUrl} 
                   alt={recipe.imgAlt}
                   className='w-full rounded-xl' 
                 />
-          </div>
-
-
+            </div>
         </div>
       </div>
     </div>
+    </div>
   );
 };
-
 
 

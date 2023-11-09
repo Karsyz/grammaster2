@@ -1,23 +1,13 @@
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 
-const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-  { name: 'Log in', href: '#' },
-]
+
 
 export default function Index() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <div className="bg-white">
       <header className="absolute inset-x-0 top-0 z-50">
-        <div className="mx-auto max-w-7xl">
+        {/* <div className="mx-auto max-w-7xl">
           <div className="px-6 pt-6 lg:max-w-2xl lg:pl-8 lg:pr-0">
             <nav className="flex items-center justify-between lg:justify-start" aria-label="Global">
               <a href="#" className="-m-1.5 p-1.5">
@@ -91,66 +81,30 @@ export default function Index() {
               </div>
             </div>
           </Dialog.Panel>
-        </Dialog>
+        </Dialog> */}
       </header>
 
       <div className="relative">
         <div className="mx-auto max-w-7xl">
-          <div className="relative z-10 pt-14 lg:w-full lg:max-w-2xl">
-            <svg
-              className="absolute inset-y-0 right-8 hidden h-full w-80 tranorange-x-1/2 transform fill-white lg:block"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <polygon points="0,0 90,0 50,100 0,100" />
-            </svg>
+          <div className="relative z-10 pt-14">
 
-            <div className="relative px-6 py-32 sm:py-40 lg:px-8 lg:py-56 lg:pr-0">
-              <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
-                <div className="hidden sm:mb-10 sm:flex">
-                  <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                    See how others are using this amazing resource.{' '}
-                    <a href="#" className="whitespace-nowrap font-semibold text-orange-600">
-                      <span className="absolute inset-0" aria-hidden="true" />
-                      Read more <span aria-hidden="true">&rarr;</span>
-                    </a>
-                  </div>
-                </div>
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                  All your baking in one place
-                </h1>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
-                  A convenient way to create, store, and adjust your recipes
-                </p>
-                <div className="mt-10 flex items-center gap-x-6">
-                  <a
-                    href="/login"
-                    className="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                  >
-                    Get started
-                  </a>
-                  {/* <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
-                    Learn more <span aria-hidden="true">→</span>
-                  </a> */}
-                  <Link to={`/recipes`}>
-                    <span>Just take me to the recipes...jeeeez</span>  
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                  {/* <a href="/recipes" className="text-sm font-semibold leading-6 text-gray-900">
-                    Just me to the recipes...jeeeez <span aria-hidden="true">→</span>
-                  </a> */}
-                </div>
+            <div className="relative px-6 py-32">
+              <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Grammaster
+              </h2>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl mt-1">
+                All your baking in one place
+              </h1>
+              <p className="mt-2 sm:mt-6 text-lg leading-8 text-gray-600">
+                A convenient way to create, store, and adjust your bread
+              </p>
+              <div className="mt-10 flex items-center gap-x-6">
+                <Link to={`/recipes`}>
+                  <span className="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">Recipes</span>  
+                </Link>
               </div>
             </div>
           </div>
-        </div>
-        <div className="bg-gray-50 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-          <img
-            className="aspect-[3/2] object-cover lg:aspect-auto lg:h-full lg:w-full"
-            src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80"
-            alt=""
-          />
         </div>
       </div>
     </div>

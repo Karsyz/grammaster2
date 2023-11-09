@@ -4,6 +4,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaPlus, FaTrashAlt } from 'react-icons/fa';
 import axios from 'axios';
 
+
 export interface IngredientInter {
   name: string;
   massTotal: number;
@@ -22,6 +23,7 @@ export interface RecipeInter {
   recipeQuantity: number;
   imageUrl: string;
   imgAlt: string;
+  cloudinaryId: string;
   ingredients: IngredientInter[];
   instructions: string[];
   previousVersions: [{}];
@@ -36,6 +38,7 @@ export class Recipe {
     recipeQuantity: number;
     imageUrl: string;
     imgAlt: string;
+    cloudinaryId: string;
     ingredients: IngredientInter[];
     instructions: string[];
     previousVersions: [{}] | null;
@@ -51,6 +54,7 @@ export class Recipe {
       this.totalQuantity = 1;
       this.imageUrl = 'https://placehold.co/500x300';
       this.imgAlt = 'placeholder';
+      this.cloudinaryId = '';
       this.previousVersions = null;
     }
 }
@@ -93,6 +97,7 @@ export default function Recipes() {
   const [recipes, setRecipes] = useState<RecipeInter[]>([])
   const [newRecipeInputShown, setNewRecipeInputShown] = useState(false);
   const [newRecipeName, setNewRecipeName] = useState('');
+  const [opacity, setOpacity] = useState('opacity-0');
 
   async function getRecipes() {
     try {
@@ -131,6 +136,12 @@ export default function Recipes() {
   }
 
   const navigate = useNavigate();
+
+  // set opacity 100 onload
+  useEffect(() => {
+    setTimeout( setOpacity('opacity-100'), 500)
+  }, [])
+
   
   return (
     <div className='bg-white text-slate-800 absolute w-full h-full flex flex-col justify-start items-center px-8'>
@@ -143,6 +154,10 @@ export default function Recipes() {
       />
 
         <div 
+          className={`overflow-scroll no-scrollbar flex flex-col items-center transition duration-500 delay-200 ease-in-out transition duration-300 ease-in-out ${opacity}`}
+        >
+
+        <div 
           className='overflow-scroll no-scrollbar flex flex-col items-center gap-6 rounded-xl mt-4'
         >
           {recipes.map(recipe => {
@@ -152,21 +167,22 @@ export default function Recipes() {
                 className='relative flex flex-col'
               >
 
-              <FaTrashAlt 
-                className='absolute top-3 right-3 font-semibold text-xl z-20 text-red-400/20 hover:text-red-500 cursor-pointer'
-                onClick={() => handleDeleteRecipe(recipe._id)}
-              />
+                <FaTrashAlt 
+                  className='absolute top-2 right-0 font-semibold text-xl z-20 text-red-400/20 hover:text-red-500 cursor-pointer'
+                  onClick={() => handleDeleteRecipe(recipe._id)}
+                />
 
-              <Link to={`/recipe/${recipe._id}`}>
-                <div className='relative w-full flex flex-row justify-center drop-shadow-md border-2 rounded-xl border-orange-400'>
-                  <img 
-                    src={recipe.imageUrl} 
-                    alt={recipe.imgAlt} 
-                    className='rounded-xl z-10'
-                  />
-                  <h2 className='absolute bottom-2 font-bold text-xl text-slate-600 z-20'>{recipe.name}</h2>    
+                <Link to={`/recipe/${recipe._id}`}>
+                  <h2 className='font-bold text-xl text-slate-800 z-20 mb-2'>{recipe.name}</h2> 
+                  <div className='relative w-full flex flex-row justify-center drop-shadow-md border-2 rounded-xl border-orange-400'>
+                    <img 
+                      src={recipe.imageUrl} 
+                      alt={recipe.imgAlt} 
+                      className='rounded-xl z-10'
+                    />
+                      
 
-                </div>
+                  </div>
                 </Link>
               </div>
             )
@@ -199,7 +215,6 @@ export default function Recipes() {
             >
               Create
             </button>
-          
           </>
             :
           <FaPlus 
@@ -208,12 +223,8 @@ export default function Recipes() {
           />
 
         }
-  
-          
-
+        </div>
       </div>
-      
-
     </div>
   );
 };
